@@ -1,8 +1,7 @@
-const Message = require("./message");
+// const Message = require("./message");
 
-class Rover {
-  // contains rover info on: position, operating mode, generatorWatts,
-  // & receiveMessage method for handling commands to update rover properties
-}
+// contains rover:
+// position, operating mode, generatorWatts, & receiveMessage() to update rover key values
+class Rover {}
 
 module.exports = Rover;

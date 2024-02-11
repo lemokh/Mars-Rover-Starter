@@ -1,7 +1,7 @@
 //  create a command, convert to message, send to rover
 //  send rover's response to command center
 
-//  Command returns object with a commandType key to instruct the rover
+//  new Command() returns object with commandType key to instruct the rover
 
 //  do not modify
 class Command {
