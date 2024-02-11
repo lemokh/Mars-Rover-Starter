@@ -13,11 +13,11 @@ describe("Command class", function () {
       new Command();
     }).toThrow(new Error("Command type required."));
   });
-  // confirms that Command() returns obj with arg1 as obj.commandType
+  // confirms Command(arg1) returns obj with arg1 as obj.commandType
   test(`constructor sets command type`, function () {
     expect(moveCommand.commandType).toBe("MOVE");
   });
-  // confirms that Command() returns obj with arg2 as obj.value
+  // confirms Command(arg1, arg2) returns obj with arg2 as obj.value
   test(`constructor sets a value passed in as the 2nd argument`, function () {
     expect(moveCommand.value).toBe(12000);
   });
