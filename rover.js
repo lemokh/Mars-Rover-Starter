@@ -1,11 +1,11 @@
 const Message = require("./message");
 
 // Rover receives message object to update its key values & return updated rover obj
-// rover obj has position, mode, generatorWatts, & receiveMessage() to update its key values
+// rover obj has: position, mode, generatorWatts, & receiveMessage() to update its key values
 class Rover {
   constructor(messageObj) {
     this.position = messageObj.position;
-    this.mode = "NORMAL";
+    this.mode = "NORMAL"; // or "LOW_POWER" --> prevents "MOVE" commands from updating rover obj
     this.generatorWatts = messageObj.generatorWatts || 110;
   }
   receiveMessage(messageObj) {
