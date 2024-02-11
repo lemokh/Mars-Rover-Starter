@@ -1,11 +1,6 @@
 const { Command, moveCommand, modeCommand } = require("../command.js");
 
-// let moveCommand = new Command("MOVE", 12000);
-// let modeCommand = new Command("MODE_CHANGE", "LOW_POWER");
-
-// NOTE: to focus on a single test output, comment out all others
-//       un-comment your code for autograder to pass
-//       do NOT edit grading tests
+// NOTE: do NOT edit grading tests
 
 describe("Command class", function () {
   it(`throws error if command type is NOT passed into constructor as the first parameter`, function () {
