@@ -1,7 +1,5 @@
 const Message = require("./message");
 
-let message = new Message();
-
 // Rover receives message object to update its key values & return updated rover obj
 // rover obj has position, mode, generatorWatts, & receiveMessage() to update its key values
 class Rover {
@@ -11,13 +9,18 @@ class Rover {
     this.generatorWatts = messageObj.generatorWatts || 110;
   }
   receiveMessage(messageObj) {
-    let updatedRoverObj = {};
+    let response = {};
     // returns object with at least two keys: message & results
-    updatedRoverObj.message = messageObj.name; // name of original Message object
-    updatedRoverObj.results = messageObj.commands; // array of Command objects
-    return updatedRoverObj;
+    response.message = messageObj.name; // name of original Message object
+    response.results = messageObj.commands; // array of Command objects
+    // for STATUS_CHECK commandType:
+    // response.results = {completed: true, roverStatus: {mode: 'NORMAL', generatorWatts: 110, position: 87382098}}
+    // mode, generatorWatts, & position depend on rover's current state
+    return response; // response.results[0] is {completed: true,}
   }
 }
+// let messageObj = new Message();
+// console.log(Rover(messageObj));
 
 module.exports = Rover;
 
@@ -27,7 +30,7 @@ let commands = [
   new Command("STATUS_CHECK"),
 ];
 let message = new Message("Test message with two commands", commands);
-let rover = new Rover(98382); // Passes 98382 as the rover's position.
+let rover = new Rover(98382); // 98382 is rover's new position.
 let response = rover.receiveMessage(message);
 
 console.log(response);

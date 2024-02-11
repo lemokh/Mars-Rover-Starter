@@ -3,9 +3,20 @@ const Rover = require("../rover.js");
 const Message = require("../message.js");
 const Command = require("../command.js");
 
+let commands = [
+  new Command("MODE_CHANGE", "LOW_POWER"),
+  new Command("STATUS_CHECK"),
+];
+let message = new Message("Test message with two commands", commands);
+let rover = new Rover(98382); // 98382 is rover's new position.
+let response = rover.receiveMessage(message);
+
+console.log(response);
+
 describe("Rover class", function () {
-  // 7 tests
+  // WRITE 7 TESTS
   test(`constructor sets position and default values for mode and generatorWatts`, () => {
+    expect(response.position).toBe();
     expect().toBe();
   });
   test(`response returned by receiveMessage contains the name of the message`, () => {
