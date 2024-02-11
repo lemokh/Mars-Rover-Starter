@@ -13,9 +13,7 @@ class Rover {
     // returns object with at least two keys: message & results
     response.message = messageObj.name; // name of original Message object
     response.results = messageObj.commands; // array of Command objects
-    // for STATUS_CHECK commandType:
-    // response.results = {completed: true, roverStatus: {mode: 'NORMAL', generatorWatts: 110, position: 87382098}}
-    // mode, generatorWatts, & position depend on rover's current state
+
     return response; // response.results[0] is {completed: true,}
   }
 }
@@ -48,4 +46,15 @@ OUTPUTS:
       }
    ]
 }
+
+for STATUS_CHECK commandType:
+
+  response.results = [
+      {
+        completed: true,
+        roverStatus: { mode: 'NORMAL', generatorWatts: 110, position: 87382098 }
+      }
+  ];
+
+mode, generatorWatts, & position depend on rover's current state
 */

@@ -8,7 +8,7 @@ let commands = [
   new Command("STATUS_CHECK"),
 ];
 let message = new Message("Test message with two commands", commands);
-let rover = new Rover(98382); // 98382 is rover's new position.
+let rover = new Rover(98382); // 98382 is rover's new position
 let response = rover.receiveMessage(message);
 
 console.log(response);
