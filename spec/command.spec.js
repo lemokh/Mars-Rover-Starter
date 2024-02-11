@@ -1,6 +1,8 @@
-const { Command, moveCommand, modeCommand } = require("../command.js");
-
 // NOTE: do NOT edit grading tests
+const Command = require("../command.js");
+
+let moveCommand = new Command("MOVE", 12000);
+console.log(moveCommand);
 
 describe("Command class", function () {
   it(`throws error if command type is NOT passed into constructor as the first parameter`, function () {

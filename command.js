@@ -1,7 +1,7 @@
 //  create a command, convert to message, send to rover
 //  send rover's response to command center
 
-//  Command: returns object with a commandType key to instruct the rover
+//  Command returns object with a commandType key to instruct the rover
 
 //  do not modify
 class Command {
@@ -15,13 +15,8 @@ class Command {
     }
   }
 }
-
-let moveCommand = new Command("MOVE", 12000);
-let modeCommand = new Command("MODE_CHANGE", "LOW_POWER");
-
-console.log(modeCommand, moveCommand);
 // ----------------------------------------------------------------------------------------------
-module.exports = { Command, moveCommand, modeCommand };
+module.exports = Command;
 // ----------------------------------------------------------------------------------------------
 // {MOVE:	Number --> updates rover position value -->	{completed: true}
 
