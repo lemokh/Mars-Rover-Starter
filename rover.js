@@ -1,18 +1,28 @@
-const Message = require("./message");
-
-// Rover receives message object to update its key values & return updated rover obj
-// rover obj has: position, mode, generatorWatts, & receiveMessage() to update its key values
+// Rover receives a message object to update its key values
+// rover = { position, mode, generatorWatts, receiveMessage() }
 class Rover {
-  constructor(messageObj) {
-    this.position = messageObj.position;
-    this.mode = "NORMAL"; // or "LOW_POWER" --> prevents "MOVE" commands from updating rover obj
-    this.generatorWatts = messageObj.generatorWatts || 110;
+  constructor(position, mode = "NORMAL", watts = 110) {
+    this.position = position;
+    this.mode = mode; // mode: "LOW_POWER" prevents "MOVE" commands from updating rover.position
+    this.generatorWatts = watts;
   }
+  // updates rover object key values
+  // returns response object with at least two keys: message name & results array
+  // results array begins with { completed: true }
   receiveMessage(messageObj) {
-    let response = {};
-    // returns object with at least two keys: message & results
-    response.message = messageObj.name; // name of original Message object
-    response.results = messageObj.commands; // array of Command objects
+    // rover response only returns {completed: true}
+    // each command returns {}
+    let response = { completed: true };
+    // updates response.completed to false if move command occurs during low power mode
+    messageObj.commands.forEach((command) => {
+      if (command.commandType === "MOVE") {
+        if (this.mode === "LOW_POWER") {
+          response.completed = false;
+        }
+      }
+    });
+    response.message = messageObj.name; // message name
+    response.results = [];
 
     return response; // response.results[0] is {completed: true,}
   }
@@ -25,22 +35,26 @@ module.exports = Rover;
 /*
 let commands = [
   new Command("MODE_CHANGE", "LOW_POWER"),
+  --> updates rover mode to 'LOW_POWER' & returns { completed: true }
+
   new Command("STATUS_CHECK"),
+  --> returns { completed: true, roverStatus: {position: '', mode: @#,generatorWatts: } }
 ];
+
 let message = new Message("Test message with two commands", commands);
 let rover = new Rover(98382); // 98382 is rover's new position.
 let response = rover.receiveMessage(message);
 
 console.log(response);
 
-OUTPUTS:
+ROVER RETURNS RESPONSE OBJECT:
 {
    message: 'Test message with two commands',
    results: [
-      {
+     { --> first command rover response
          completed: true
       },
-      {
+      { --> second command rover response
          completed: true,
          roverStatus: { mode: 'LOW_POWER', generatorWatts: 110, position: 98382 }
       }

@@ -1,5 +1,5 @@
 //  create a command, convert to message, send to rover
-//  send rover's response to command center
+//  return rover's response
 
 //  new Command() returns object with commandType key to instruct the rover
 
@@ -7,13 +7,14 @@
 class Command {
   constructor(commandType, value) {
     //  commandType options:
-    //    'MODE_CHANGE' (arg2 is '') || 'MOVE' (arg2 is #)|| 'STATUS_CHECK' (no arg2)
+    //    'MODE_CHANGE' (arg2 string) || 'MOVE' (arg2 number)|| 'STATUS_CHECK' (no arg2)
     this.commandType = commandType;
     this.value = value;
 
     if (!commandType) {
       throw Error("Command type required.");
     }
+    // return { commandType, value };
   }
 }
 // ----------------------------------------------------------------------------------------------

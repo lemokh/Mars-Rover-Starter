@@ -4,7 +4,7 @@ const Command = require("../command.js");
 let moveCommand = new Command("MOVE", 12000);
 
 describe("Command class", function () {
-  it(`throws error if command type is NOT passed into constructor as the first parameter`, function () {
+  it(`throws error if a command type is NOT passed into the constructor as the first parameter`, function () {
     expect(function () {
       new Command();
     }).toThrow(new Error("Command type required."));
@@ -24,7 +24,7 @@ describe("Command class", function () {
 // {MODE_CHANGE:	String --> updates rover mode value -->	{completed: true}
 
 // {STATUS_CHECK --> No value to update
-// --> {completed: true, roverStatus: {mode: 'NORMAL', generatorWatts: 110, position: 87382098}}
+// --> {completed: true, roverStatus: { position: 87382098, mode: 'NORMAL', generatorWatts: 110}}
 // --> key values for mode, generatorWatts, & position depend on rover's current state
 
 // completed response key value will be false if command was NOT completed
