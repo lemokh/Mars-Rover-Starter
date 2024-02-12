@@ -57,4 +57,17 @@ for STATUS_CHECK commandType:
   ];
 
 mode, generatorWatts, & position depend on rover's current state
+
+==========================================================================================
+
+expect(received).toBeTruthy()
+
+Received: undefined
+
+let response = rover.receiveMessage(message);
+
+expect(response.message).toEqual("TA power");
+expect(response.results[0].completed).toBeTruthy();
+expect(response.results[1].roverStatus.position).toEqual(4321);
+expect(response.results[2].completed).toBeTruthy();
 */
