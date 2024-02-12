@@ -7,10 +7,11 @@ let commands = [
   new Command("MODE_CHANGE", "LOW_POWER"),
   new Command("STATUS_CHECK"),
 ];
+
 let rover = new Rover(98382); // 98382 is rover's new position
 let message = new Message("Test message with two commands", commands);
 let response = rover.receiveMessage(message);
-/*  OUTPUTS:
+/*  OUTPUT:
 { message: 'Test message with two commands',
   results: [
     { completed: true },
@@ -36,7 +37,10 @@ console.log("response:", response);
         Command { commandType: 'STATUS_CHECK', value: undefined }
       ]
     }  */
-//  response.results[0].completed
+
+//  response.results[0].completed ??
+
+// results is array of objects with completed as first key
 
 describe("Rover class", function () {
   // WRITE 7 TESTS
@@ -62,6 +66,8 @@ describe("Rover class", function () {
     // a roverStatus object describing the current state of the rover object —
     // --- mode, generatorWatts, and position --- check each of these for accuracy
 
+    //  No updates for STATUS_CHECK command... simply return current state object
+
     // expect(response.results[1].roverStatus).toEqual({
     //    mode: "LOW_POWER",
     //    generatorWatts: 110,
@@ -73,9 +79,8 @@ describe("Rover class", function () {
     expect(response.results[1].roverStatus.position).toBe(98382);
   });
   test(`responds correctly to the mode change command`, () => {
-    // how 'MODE_CHANGE' updates rover? --> no value to update
-    // --> roverStatus = {!!mode!!, position, generatorWatts}
-
+    // how 'MODE_CHANGE' updates rover --> roverStatus = {!!mode!!, position, generatorWatts}
+    // mode --> 'NORMAL' or 'LOW_POWER'
     expect().toBe();
   });
   test(`responds with a false completed value when attempting to move in LOW_POWER mode`, () => {
@@ -88,6 +93,15 @@ describe("Rover class", function () {
     // expect().toBe();
   });
   test(`responds with the position for the move command`, () => {
-    expect().toBe();
+    if (message.name === "MOVE") {
+      expect(rover.position).toBe();
+    }
   });
 });
+// rover.position
+// rover.mode
+// rover.generatorWatts
+
+// draw out how all this connects for all commandTypes
+// command object --> message object --> rover object
+// if

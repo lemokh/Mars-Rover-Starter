@@ -6,7 +6,8 @@
 //  do not modify
 class Command {
   constructor(commandType, value) {
-    //  commandType options: 'MODE_CHANGE' || 'MOVE' || 'STATUS_CHECK'
+    //  commandType options:
+    //    'MODE_CHANGE' (arg2 is '') || 'MOVE' (arg2 is #)|| 'STATUS_CHECK' (no arg2)
     this.commandType = commandType;
     this.value = value;
 
@@ -18,19 +19,21 @@ class Command {
 // ----------------------------------------------------------------------------------------------
 module.exports = Command;
 // ----------------------------------------------------------------------------------------------
-// {MOVE:	Number --> updates rover position value -->	{completed: true}
+// {MOVE --> updates rover position number -->	returns {completed: true}, if mode is normal
 
-// {MODE_CHANGE:	String --> updates rover mode value -->	{completed: true}
+// {MODE_CHANGE --> updates rover mode string -->	returns {completed: true}
 
-// {STATUS_CHECK --> No value to update
-// --> {completed: true, roverStatus: {mode: 'NORMAL', generatorWatts: 110, position: 87382098}}
-// --> key values for mode, generatorWatts, & position depend on rover's current state
+// {STATUS_CHECK --> no arg2, no update
+// --> returns { completed: true,
+//               roverStatus: {mode: 'NORMAL' || 'LOW_POWER', generatorWatts: 110, position: someNumber }
+//             }
+// --> mode, generatorWatts, & position values depend on rover's current state
 
-// completed response key value will be false if command was NOT completed
-
-// Mode	Restrictions
-// LOW_POWER:	Can’t be moved in this state
-// NORMAL:	None
+// if ( rover.mode === 'LOW_POWER') {
+//    if ( commndType === 'MOVE') {
+//      return {completed: false}
+//    }
+// }
 // ----------------------------------------------------------------------------------------------
 // if (commandType === "MOVE") {
 //   if (typeof value !== "number") {
