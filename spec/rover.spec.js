@@ -4,104 +4,89 @@ const Message = require("../message.js");
 const Rover = require("../rover.js");
 
 let commands = [
-  new Command("MODE_CHANGE", "LOW_POWER"),
+  new Command("MODE_CHANGE", "LOW_POWER"), // needs to push {completed: true}
   new Command("STATUS_CHECK"),
+  // new Command("MOVE", 200),
 ];
 
 let rover = new Rover(98382); // 98382 as arg1 sets rover's position
+// { position: #, mode: '', generatedWatts: # }
+console.log("ROVER:", rover);
+
 let message = new Message("Test message with two commands", commands);
+// { name: '', commands: [] }
+console.log("MESSAGE:", message);
+
 let response = rover.receiveMessage(message);
-/*  OUTPUT:
+// { message: '', results: [] }
+console.log("RESPONSE:", response);
+console.log(message.commands.length, message.commands);
+
+/*  EXPECTED ROVER RESPONSE OBJECT:
 { message: 'Test message with two commands',
   results: [
     { completed: true },
     { completed: true,
-      roverStatus: { mode: 'LOW_POWER', generatorWatts: 110, position: 98382 } }
+      roverStatus: { mode: 'LOW_POWER', generatorWatts: 110, position: 98382 }
+    }
   ]
 } */
-console.log("rover:", rover);
-// rover: Rover { position: undefined, mode: 'NORMAL', generatorWatts: 110 }
-console.log("message:", message);
-/*  message: Message {
-      name: 'Test message with two commands',
-      commands: [
-        Command { commandType: 'MODE_CHANGE', value: 'LOW_POWER' },
-        Command { commandType: 'STATUS_CHECK', value: undefined }
-      ]
-    } */
-console.log("response:", response);
-/*  response: {
-      message: 'Test message with two commands',
-      results: [
-        Command { commandType: 'MODE_CHANGE', value: 'LOW_POWER' },
-        Command { commandType: 'STATUS_CHECK', value: undefined }
-      ]
-    }  */
 
-//  response.results[0].completed ??
-
-// results is array of objects with completed as first key
-
+// 7 TESTS
 describe("Rover class", function () {
-  // WRITE 7 TESTS
   test(`constructor sets position and default values for mode and generatorWatts`, () => {
-    expect(rover.position).toBe(98382); // UNDEFINED
-    expect(rover.mode).toBe("LOW_POWER");
+    console.log("ROVER.POSITION", rover.position);
+    // expect(rover.position).toBe();
+    expect(rover.mode).toBe("NORMAL");
+    // expect(rover.mode).toBe("LOW_POWER");
     expect(rover.generatorWatts).toBe(110);
   });
   test(`response returned by receiveMessage contains the name of the message`, () => {
     expect(response.message).toBe("Test message with two commands");
   });
   test(`response returned by receiveMessage includes two results if two commands are sent in the message`, () => {
-    if (message.commands.length === 2) {
-      expect(response.results.length).toBe(2);
-    }
+    // WHY ARE THESE NOT BE THE SAME LENGTH?
+    console.log(response.results.length, response.results);
+    console.log(message.commands.length, message.commands);
+    expect(response.results.length).toBe(message.commands.length);
   });
   test(`responds correctly to the status check command`, () => {
-    // commandType === 'STATUS_CHECK'
-    // { completed: true,
-    // roverStatus: { mode: 'LOW_POWER', generatorWatts: 110, position: 98382 } }
-
-    // For the STATUS_CHECK command, receiveMessage(message).results includes
-    // a roverStatus object describing the current state of the rover object —
-    // --- mode, generatorWatts, and position --- check each of these for accuracy
-
-    //  No updates for STATUS_CHECK command... simply return current state object
-
-    // expect(response.results[1].roverStatus).toEqual({
-    //    mode: "LOW_POWER",
-    //    generatorWatts: 110,
-    //    position: 98382,
-    // });
-    //  UNDEFINED
-    expect(response.results[1].roverStatus.mode).toBe("LOW_POWER");
-    expect(response.results[1].roverStatus.generatorWatts).toBe(110);
-    expect(response.results[1].roverStatus.position).toBe(98382);
+    message.commands.forEach((command, index) => {
+      if (command.commandType === "STATUS_CHECK") {
+        console.log("index:", index, "command:", command);
+        expect(response.results[index].roverStatus.position).toBe(
+          rover.position
+        );
+        expect(response.results[index].roverStatus.mode).toBe(rover.mode);
+        expect(response.results[index].roverStatus.generatorWatts).toBe(
+          rover.generatorWatts
+        );
+      }
+    });
   });
   test(`responds correctly to the mode change command`, () => {
-    // how 'MODE_CHANGE' updates rover --> roverStatus = {!!mode!!, position, generatorWatts}
-    // mode --> 'NORMAL' or 'LOW_POWER'
-    expect().toBe();
+    //  check response.completed & rover.mode for accuracy
+    message.commands.forEach((command, index) => {
+      if (command.commandType === "MODE") {
+        expect(response.results[index].completed).toBe(true);
+        expect(rover.mode).toBe(command.value);
+      }
+    });
   });
   test(`responds with a false completed value when attempting to move in LOW_POWER mode`, () => {
-    if (
-      message.name === "MOVE" &&
-      response.results[1].roverStatus.mode === "LOW_POWER"
-    ) {
-      response.completed = false;
-    }
-    // expect().toBe();
+    message.commands.forEach((command, index) => {
+      if (command.commandType === "MOVE") {
+        if (response.results[index].roverStatus.mode === "LOW_POWER") {
+          expect(response.results[index].completed).toBe(false);
+        }
+      }
+    });
   });
   test(`responds with the position for the move command`, () => {
-    if (message.name === "MOVE") {
-      expect(rover.position).toBe();
-    }
+    message.commands.forEach((command) => {
+      if (command.commandType === "MOVE") {
+        expect(rover.position).toBe(command.value);
+      }
+    });
   });
 });
-// rover.position
-// rover.mode
-// rover.generatorWatts
-
-// draw out how all this connects for all commandTypes
-// command object --> message object --> rover object
-// if

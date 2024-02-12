@@ -8,27 +8,51 @@ class Rover {
   }
   // updates rover object key values
   // returns response object with at least two keys: message name & results array
-  // results array begins with { completed: true }
   receiveMessage(messageObj) {
-    // rover response only returns {completed: true}
-    // each command returns {}
-    let response = { completed: true };
-    // updates response.completed to false if move command occurs during low power mode
-    messageObj.commands.forEach((command) => {
-      if (command.commandType === "MOVE") {
-        if (this.mode === "LOW_POWER") {
-          response.completed = false;
-        }
-      }
-    });
+    // console.log("MESSAGEobj:", messageObj);
+    // console.log("ROVER PROPS:", {
+    //   position: this.position,
+    //   mode: this.mode,
+    //   generatorWatts: this.generatorWatts,
+    // });
+
+    let response = {}; // consider calling this something else?? rover.spec.js has own response variable
     response.message = messageObj.name; // message name
     response.results = [];
 
-    return response; // response.results[0] is {completed: true,}
+    // handles each command type
+    // populates response.results array with expected command results
+    messageObj.commands.forEach((command) => {
+      if (command.commandType === "MODE") {
+        this.mode = command.value;
+        response.results.push({ completed: true });
+      }
+      // updates rover command completed response to false
+      // if move command occurs during low power mode
+      if (command.commandType === "MOVE") {
+        if (this.mode === "LOW_POWER") {
+          response.results.push({ completed: false });
+        } else {
+          this.position = command.value;
+          response.results.push({
+            completed: true,
+          });
+        }
+      }
+      if (command.commandType === "STATUS_CHECK") {
+        response.results.push({
+          completed: true,
+          roverStatus: {
+            position: this.position,
+            mode: this.mode,
+            generatorWatts: this.watts,
+          },
+        });
+      }
+    });
+    return response;
   }
 }
-// let messageObj = new Message();
-// console.log(Rover(messageObj));
 
 module.exports = Rover;
 

@@ -14,7 +14,6 @@ class Command {
     if (!commandType) {
       throw Error("Command type required.");
     }
-    // return { commandType, value };
   }
 }
 // ----------------------------------------------------------------------------------------------

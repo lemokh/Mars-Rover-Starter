@@ -14,5 +14,3 @@ class Message {
 }
 
 module.exports = Message;
-
-// DO COMMAND OR MESSAGE CLASS RETURN AN OBJECT?
