@@ -18,7 +18,6 @@ let response = rover.receiveMessage(message);
       roverStatus: { mode: 'LOW_POWER', generatorWatts: 110, position: 98382 } }
   ]
 } */
-
 console.log("rover:", rover);
 // rover: Rover { position: undefined, mode: 'NORMAL', generatorWatts: 110 }
 console.log("message:", message);
@@ -29,7 +28,6 @@ console.log("message:", message);
         Command { commandType: 'STATUS_CHECK', value: undefined }
       ]
     } */
-
 console.log("response:", response);
 /*  response: {
       message: 'Test message with two commands',
@@ -39,6 +37,7 @@ console.log("response:", response);
       ]
     }  */
 //  response.results[0].completed
+
 describe("Rover class", function () {
   // WRITE 7 TESTS
   test(`constructor sets position and default values for mode and generatorWatts`, () => {
@@ -58,18 +57,35 @@ describe("Rover class", function () {
     // commandType === 'STATUS_CHECK'
     // { completed: true,
     // roverStatus: { mode: 'LOW_POWER', generatorWatts: 110, position: 98382 } }
-    expect(response.results[1].roverStatus).toEqual({
-      //  UNDEFINED
-      mode: "LOW_POWER",
-      generatorWatts: 110,
-      position: 98382,
-    });
+
+    // For the STATUS_CHECK command, receiveMessage(message).results includes
+    // a roverStatus object describing the current state of the rover object —
+    // --- mode, generatorWatts, and position --- check each of these for accuracy
+
+    // expect(response.results[1].roverStatus).toEqual({
+    //    mode: "LOW_POWER",
+    //    generatorWatts: 110,
+    //    position: 98382,
+    // });
+    //  UNDEFINED
+    expect(response.results[1].roverStatus.mode).toBe("LOW_POWER");
+    expect(response.results[1].roverStatus.generatorWatts).toBe(110);
+    expect(response.results[1].roverStatus.position).toBe(98382);
   });
   test(`responds correctly to the mode change command`, () => {
+    // how 'MODE_CHANGE' updates rover? --> no value to update
+    // --> roverStatus = {!!mode!!, position, generatorWatts}
+
     expect().toBe();
   });
   test(`responds with a false completed value when attempting to move in LOW_POWER mode`, () => {
-    expect().toBe();
+    if (
+      message.name === "MOVE" &&
+      response.results[1].roverStatus.mode === "LOW_POWER"
+    ) {
+      response.completed = false;
+    }
+    // expect().toBe();
   });
   test(`responds with the position for the move command`, () => {
     expect().toBe();
