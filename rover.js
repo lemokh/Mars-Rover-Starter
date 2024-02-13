@@ -5,7 +5,6 @@ class Rover {
     this.position = position;
     this.mode = mode; // mode: "LOW_POWER" prevents "MOVE" commands from updating rover position
     this.generatorWatts = watts;
-    console.log("generatorWatts", this.generatorWatts); // 110
   }
   // updates rover object key values
   // returns response object with at least two keys: message name & results array

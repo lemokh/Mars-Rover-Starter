@@ -27,11 +27,9 @@ let response = rover.receiveMessage(message);
   ]
 } */
 
-// 7 TESTS
 describe("Rover class", function () {
   test(`constructor sets position and default values for mode and generatorWatts`, () => {
-    // console.log("ROVER.POSITION", rover.position);
-    // expect(rover.position).toBe();
+    expect(rover.position).toBe(98382);
     expect(rover.mode).toBe("LOW_POWER");
     expect(rover.generatorWatts).toBe(110);
   });
@@ -55,7 +53,6 @@ describe("Rover class", function () {
     });
   });
   test(`responds correctly to the mode change command`, () => {
-    //  check response.completed & rover.mode for accuracy
     message.commands.forEach((command, index) => {
       if (command.commandType === "MODE") {
         expect(response.results[index].completed).toBe(true);
