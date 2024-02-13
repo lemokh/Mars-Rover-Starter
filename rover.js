@@ -3,21 +3,14 @@
 class Rover {
   constructor(position, mode = "NORMAL", watts = 110) {
     this.position = position;
-    this.mode = mode; // mode: "LOW_POWER" prevents "MOVE" commands from updating rover.position
+    this.mode = mode; // mode: "LOW_POWER" prevents "MOVE" commands from updating rover position
     this.generatorWatts = watts;
     console.log("generatorWatts", this.generatorWatts); // 110
   }
   // updates rover object key values
   // returns response object with at least two keys: message name & results array
   receiveMessage(messageObj) {
-    // console.log("MESSAGEobj:", messageObj);
-    console.log("ROVER PROPS:", {
-      position: this.position,
-      mode: this.mode,
-      generatorWatts: this.generatorWatts,
-    });
-
-    let responseObj = {}; // rename response ?? rover.spec.js has own response variable
+    let responseObj = {};
     responseObj.message = messageObj.name; // message name
     responseObj.results = [];
 
@@ -26,7 +19,6 @@ class Rover {
     messageObj.commands.forEach((command) => {
       if (command.commandType === "MODE_CHANGE") {
         this.mode = command.value;
-        console.log("command.value:", command.value); // 'LOW_POWER'
         responseObj.results.push({ completed: true });
       }
       // updates rover command completed response to false
@@ -52,7 +44,7 @@ class Rover {
         });
       }
     });
-    console.log("RESPSONSEobj:", responseObj);
+    // console.log("RESPSONSEobj:", responseObj);
     return responseObj;
   }
 }
@@ -61,5 +53,5 @@ module.exports = Rover;
 
 /*==========================================================================================
 Question: my GitHub profile only adds a green box to my activity calendar when creating a new repo.
-Is there a way to add an GitHub calendar green box each time I push changes to a GitHub repo?
+Is there a way to add an GitHub calendar green box each time thatI push changes to my GitHub repo?
 ==========================================================================================*/

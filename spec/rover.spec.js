@@ -10,15 +10,12 @@ let commands = [
 
 let rover = new Rover(98382); // 98382 as arg1 sets rover's position
 // { position: #, mode: '', generatedWatts: # }
-console.log("ROVER.position:", rover.position);
 
 let message = new Message("Test message with two commands", commands);
 // { name: '', commands: [] }
-// console.log("MESSAGE:", message);
 
 let response = rover.receiveMessage(message);
 // { message: '', results: [] }
-console.log("RESPONSE:", response);
 
 /*  EXPECTED ROVER RESPONSE OBJECT:
 { message: 'Test message with two commands',
@@ -36,7 +33,6 @@ describe("Rover class", function () {
     // console.log("ROVER.POSITION", rover.position);
     // expect(rover.position).toBe();
     expect(rover.mode).toBe("LOW_POWER");
-    // expect(rover.mode).toBe("LOW_POWER");
     expect(rover.generatorWatts).toBe(110);
   });
   test(`response returned by receiveMessage contains the name of the message`, () => {
@@ -48,7 +44,6 @@ describe("Rover class", function () {
   test(`responds correctly to the status check command`, () => {
     message.commands.forEach((command, index) => {
       if (command.commandType === "STATUS_CHECK") {
-        console.log("index:", index, "command:", command);
         expect(response.results[index].roverStatus.position).toBe(
           rover.position
         );
