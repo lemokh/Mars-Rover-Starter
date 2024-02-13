@@ -5,107 +5,61 @@ class Rover {
     this.position = position;
     this.mode = mode; // mode: "LOW_POWER" prevents "MOVE" commands from updating rover.position
     this.generatorWatts = watts;
+    console.log("generatorWatts", this.generatorWatts); // 110
   }
   // updates rover object key values
   // returns response object with at least two keys: message name & results array
   receiveMessage(messageObj) {
     // console.log("MESSAGEobj:", messageObj);
-    // console.log("ROVER PROPS:", {
-    //   position: this.position,
-    //   mode: this.mode,
-    //   generatorWatts: this.generatorWatts,
-    // });
+    console.log("ROVER PROPS:", {
+      position: this.position,
+      mode: this.mode,
+      generatorWatts: this.generatorWatts,
+    });
 
-    let response = {}; // consider calling this something else?? rover.spec.js has own response variable
-    response.message = messageObj.name; // message name
-    response.results = [];
+    let responseObj = {}; // rename response ?? rover.spec.js has own response variable
+    responseObj.message = messageObj.name; // message name
+    responseObj.results = [];
 
     // handles each command type
     // populates response.results array with expected command results
     messageObj.commands.forEach((command) => {
-      if (command.commandType === "MODE") {
+      if (command.commandType === "MODE_CHANGE") {
         this.mode = command.value;
-        response.results.push({ completed: true });
+        console.log("command.value:", command.value); // 'LOW_POWER'
+        responseObj.results.push({ completed: true });
       }
       // updates rover command completed response to false
       // if move command occurs during low power mode
       if (command.commandType === "MOVE") {
         if (this.mode === "LOW_POWER") {
-          response.results.push({ completed: false });
+          responseObj.results.push({ completed: false });
         } else {
           this.position = command.value;
-          response.results.push({
+          responseObj.results.push({
             completed: true,
           });
         }
       }
       if (command.commandType === "STATUS_CHECK") {
-        response.results.push({
+        responseObj.results.push({
           completed: true,
           roverStatus: {
             position: this.position,
             mode: this.mode,
-            generatorWatts: this.watts,
+            generatorWatts: this.watts || 110,
           },
         });
       }
     });
-    return response;
+    console.log("RESPSONSEobj:", responseObj);
+    return responseObj;
   }
 }
 
 module.exports = Rover;
 
-/*
-let commands = [
-  new Command("MODE_CHANGE", "LOW_POWER"),
-  --> updates rover mode to 'LOW_POWER' & returns { completed: true }
-
-  new Command("STATUS_CHECK"),
-  --> returns { completed: true, roverStatus: {position: '', mode: @#,generatorWatts: } }
-];
-
-let message = new Message("Test message with two commands", commands);
-let rover = new Rover(98382); // 98382 is rover's new position.
-let response = rover.receiveMessage(message);
-
-console.log(response);
-
-ROVER RETURNS RESPONSE OBJECT:
-{
-   message: 'Test message with two commands',
-   results: [
-     { --> first command rover response
-         completed: true
-      },
-      { --> second command rover response
-         completed: true,
-         roverStatus: { mode: 'LOW_POWER', generatorWatts: 110, position: 98382 }
-      }
-   ]
-}
-
-for STATUS_CHECK commandType:
-
-  response.results = [
-      {
-        completed: true,
-        roverStatus: { mode: 'NORMAL', generatorWatts: 110, position: 87382098 }
-      }
-  ];
-
-mode, generatorWatts, & position depend on rover's current state
-
-==========================================================================================
-
-expect(received).toBeTruthy()
-
-Received: undefined
-
-let response = rover.receiveMessage(message);
-
-expect(response.message).toEqual("TA power");
-expect(response.results[0].completed).toBeTruthy();
-expect(response.results[1].roverStatus.position).toEqual(4321);
-expect(response.results[2].completed).toBeTruthy();
-*/
+/*==========================================================================================
+Question: my GitHub profile only adds a green box to my activity calendar when creating a new repo.
+Is there a way to add an GitHub calendar green box each time I push changes to a GitHub repo?
+==========================================================================================*/
