@@ -50,7 +50,7 @@ class Rover {
 
 module.exports = Rover;
 
-/*==========================================================================================
+/*=================================================================================================
 Question: my GitHub profile only adds a green box to my activity calendar when creating a new repo.
 Is there a way to add an GitHub calendar green box each time thatI push changes to my GitHub repo?
-==========================================================================================*/
+=================================================================================================*/
